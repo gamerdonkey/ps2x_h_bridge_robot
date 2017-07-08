@@ -4,15 +4,16 @@
 #define PS2_CMD        11
 #define PS2_SEL        10
 #define PS2_CLK        12
+#define pressures   false
+#define rumble      false
 
 #define LEFT_FORWARD_PIN 3
 #define LEFT_REVERSE_PIN 5
 #define RIGHT_FORWARD_PIN 6
 #define RIGHT_REVERSE_PIN 9
 
-#define pressures   false
-#define rumble      false
 PS2X ps2x;
+int controllerType;
 
 void setup() {
   pinMode(LEFT_FORWARD_PIN, OUTPUT);
@@ -27,13 +28,15 @@ void setup() {
     infiniteBlinking();
   }
   
-  if(ps2x.readType() != 2) {
-    // Wrong type of controller. Blink on, brother!
-    infiniteBlinking();
-  }
+  controllerType = ps2x.readType();
+}
+
+void loop() {
+  
 }
 
 void infiniteBlinking() {
+  int led = 13;
   while(true) {
     digitalWrite(led, HIGH);
     delay(1000);
