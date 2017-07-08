@@ -10,9 +10,16 @@
 #define LEFT_FORWARD_PIN 3
 #define LEFT_REVERSE_PIN 5
 #define RIGHT_FORWARD_PIN 6
-#define RIGHT_REVERSE_PIN 9
+#define RIGHT_REVERSE_PIN 7
 
 PS2X ps2x;
+
+int xValue;
+int yValue;
+int throttleInput;
+int steeringInput;
+int leftMotorOutput;
+int rightMotorOutput;
 
 void setup() {
   pinMode(LEFT_FORWARD_PIN, OUTPUT);
@@ -34,7 +41,41 @@ void setup() {
 }
 
 void loop() {
-  ps2x.read_gamepad(false, 0);
+  delay(10);
+  
+  if(ps2x.read_gamepad(false, 0)) {
+    xValue = ps2x.Analog(PSS_LX);
+    yValue = ps2x.Analog(PSS_LY);
+  }
+  else {
+    xValue = 128;
+    yValue = 128;
+  }
+  
+  // Upper left on stick is (0,0), lower right is (255, 255)
+  throttleInput = constrain((yValue - 128) * -2, -255, 255);
+  steeringInput = constrain((xValue - 128) * 2, -255, 255);
+  
+  leftMotorOutput = constrain(throttleInput + steeringInput, -255, 255);
+  rightMotorOutput = constrain(throttleInput - steeringInput, -255, 255);
+  
+  if(leftMotorOutput > 0) {
+    analogWrite(LEFT_FORWARD_PIN, leftMotorOutput);
+    digitalWrite(LEFT_REVERSE_PIN, LOW);
+  }
+  else {
+    digitalWrite(LEFT_FORWARD_PIN, LOW);
+    analogWrite(LEFT_REVERSE_PIN, abs(leftMotorOutput));
+  }
+  
+  if(rightMotorOutput > 0) {
+    analogWrite(RIGHT_FORWARD_PIN, rightMotorOutput);
+    digitalWrite(RIGHT_REVERSE_PIN, LOW);
+  }
+  else {
+    digitalWrite(RIGHT_FORWARD_PIN, LOW);
+    analogWrite(RIGHT_REVERSE_PIN, abs(rightMotorOutput));
+  }
   
 }
 
