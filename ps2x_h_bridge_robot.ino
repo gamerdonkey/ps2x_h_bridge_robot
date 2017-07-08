@@ -13,7 +13,6 @@
 #define RIGHT_REVERSE_PIN 9
 
 PS2X ps2x;
-int controllerType;
 
 void setup() {
   pinMode(LEFT_FORWARD_PIN, OUTPUT);
@@ -25,22 +24,26 @@ void setup() {
   
   if(ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble) != 0) {
     // Error condition. Let's blink endlessly
-    infiniteBlinking();
+    infiniteBlinking(1000);
   }
   
-  controllerType = ps2x.readType();
+  if(ps2x.readType() != 1) {
+    // Wrong controller type. Blink on, brother!
+    infiniteBlinking(2000);
+  }
 }
 
 void loop() {
+  ps2x.read_gamepad(false, 0);
   
 }
 
-void infiniteBlinking() {
+void infiniteBlinking(int blinkDelay) {
   int led = 13;
   while(true) {
     digitalWrite(led, HIGH);
-    delay(1000);
+    delay(blinkDelay);
     digitalWrite(led, LOW);
-    delay(1000);
+    delay(blinkDelay);
   }
 }
