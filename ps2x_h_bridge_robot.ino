@@ -7,6 +7,16 @@
 #define pressures   false
 #define rumble      false
 
+//#define RIGHT_STICK_DRIVE
+
+#ifdef RIGHT_STICK_DRIVE
+  #define DRIVE_STICK_X PSS_RX
+  #define DRIVE_STICK_Y PSS_RY
+#else
+  #define DRIVE_STICK_X PSS_LX
+  #define DRIVE_STICK_Y PSS_LY
+#endif
+
 #define LEFT_FORWARD_PIN 3
 #define LEFT_REVERSE_PIN 5
 #define RIGHT_FORWARD_PIN 6
@@ -42,8 +52,8 @@ void loop() {
   delay(10);
   
   if(ps2x.read_gamepad(false, 0)) {
-    xValue = ps2x.Analog(PSS_LX);
-    yValue = ps2x.Analog(PSS_LY);
+    xValue = ps2x.Analog(DRIVE_STICK_X);
+    yValue = ps2x.Analog(DRIVE_STICK_Y);
   }
   else {
     xValue = 128;
