@@ -1,9 +1,9 @@
 #include <PS2X_lib.h> 
 
-#define PS2_DAT        13
-#define PS2_CMD        11
-#define PS2_SEL        10
-#define PS2_CLK        12
+#define PS2_DAT        14
+#define PS2_CMD        15
+#define PS2_SEL        16
+#define PS2_CLK        17
 #define pressures   false
 #define rumble      false
 
