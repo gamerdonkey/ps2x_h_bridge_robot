@@ -27,17 +27,15 @@ void setup() {
   pinMode(RIGHT_FORWARD_PIN, OUTPUT);
   pinMode(RIGHT_REVERSE_PIN, OUTPUT);
   
-  delay(500);
+  boolean controllerConfigured = false;
+  boolean correctControllerType = false;
   
-  if(ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble) != 0) {
-    // Error condition. Let's blink endlessly
-    infiniteBlinking(1000);
+  while(!controllerConfigured && !correctControllerType) {
+    controllerConfigured = (ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, pressures, rumble) == 0);
+    correctControllerType = (ps2x.readType() == 1);
+    delay(500);
   }
-  
-  if(ps2x.readType() != 1) {
-    // Wrong controller type. Blink on, brother!
-    infiniteBlinking(2000);
-  }
+
 }
 
 void loop() {
