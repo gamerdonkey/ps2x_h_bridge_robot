@@ -1,4 +1,4 @@
-#include <PS2X_lib.h> 
+#include <PS2X_lib.h>
 
 #define PS2_DAT        14
 #define PS2_CMD        15
@@ -7,6 +7,7 @@
 #define pressures   false
 #define rumble      false
 
+//#define D_PAD_DRIVE
 //#define RIGHT_STICK_DRIVE
 
 #ifdef RIGHT_STICK_DRIVE
@@ -52,8 +53,36 @@ void loop() {
   delay(10);
   
   if(ps2x.read_gamepad(false, 0)) {
+
+#ifndef D_PAD_DRIVE
+
     xValue = ps2x.Analog(DRIVE_STICK_X);
     yValue = ps2x.Analog(DRIVE_STICK_Y);
+
+#else D_PAD_DRIVE
+
+    if(ps2x.Button(PSB_PAD_UP)) {
+      yValue = 0;
+    }
+    else if(ps2x.Button(PSB_PAD_DOWN)) {
+      yValue = 255;
+    }
+    else {
+      yValue = 128;
+    }
+
+    if(ps2x.Button(PSB_PAD_LEFT)) {
+      xValue = 0;
+    }
+    else if(ps2x.Button(PSB_PAD_RIGHT)) {
+      xValue = 255;
+    }
+    else {
+      xValue = 128;
+    }
+
+#endif
+
   }
   else {
     xValue = 128;
