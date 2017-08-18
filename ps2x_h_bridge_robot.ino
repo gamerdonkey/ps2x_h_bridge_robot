@@ -59,7 +59,7 @@ void loop() {
     xValue = ps2x.Analog(DRIVE_STICK_X);
     yValue = ps2x.Analog(DRIVE_STICK_Y);
 
-#else D_PAD_DRIVE
+#else
 
     if(ps2x.Button(PSB_PAD_UP)) {
       yValue = 0;
